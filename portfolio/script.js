@@ -134,3 +134,88 @@ const barsObserver = new IntersectionObserver((entries, obs) => {
 }, { threshold: 0.35 });
 
 radialBars.forEach(bar => barsObserver.observe(bar));
+
+
+// Contact form handler
+(function () {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  const msgEl = form.querySelector('.form-msg');
+  const submitBtn = form.querySelector('.send');
+
+  function setMessage(text, type = 'info') {
+    if (!msgEl) return;
+    msgEl.textContent = text;
+    msgEl.style.color = type === 'error' ? '#ff8a8a' : '#a7fffb';
+  }
+
+  function setLoading(loading) {
+    if (!submitBtn) return;
+    submitBtn.disabled = loading;
+    submitBtn.value = loading ? 'Sending...' : 'Submit';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Basic client-side validation
+    const formData = new FormData(form);
+    const name = (formData.get('name') || '').toString().trim();
+    const email = (formData.get('email') || '').toString().trim();
+    const message = (formData.get('message') || '').toString().trim();
+
+    if (!name || !email || !message) {
+      setMessage('Please fill the required fields.', 'error');
+      return;
+    }
+
+    //  email regex
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) {
+      setMessage('Please enter a valid email.', 'error');
+      return;
+    }
+
+    setLoading(true);
+    setMessage('');
+
+    try {
+      // Send as JSON for cleaner payload
+      const payload = {
+        name,
+        email,
+        subject: (formData.get('subject') || '').toString().trim(),
+        message
+      };
+
+      const resp = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (resp.ok) {
+        setMessage('Thanks! Your message was sent.');
+        form.reset();
+      } else {
+        // Try to read error from Formspree
+        let err = 'Something went wrong. Please try again later.';
+        try {
+          const data = await resp.json();
+          if (data && data.errors && data.errors.length) {
+            err = data.errors.map(e => e.message).join(', ');
+          }
+        } catch (_) {}
+        setMessage(err, 'error');
+      }
+    } catch (error) {
+      setMessage('Network error. Please check connection and retry.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
