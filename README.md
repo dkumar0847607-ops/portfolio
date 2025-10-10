@@ -15,6 +15,9 @@ It’s part of **Hacktoberfest 2025** where contributors can add their **portfol
 - Improve UI/UX of existing templates
 - Add **documentation & guides**
 
+## 🌍 Host Your Template
+To help reviewers reproduce issues, deploy any folder to Vercel as a static site. See `HOSTING_VERCEL.md` for step-by-step instructions and minimal code changes per template.
+
 ---
 
 ### 🎨 Hacktoberfest 2025
