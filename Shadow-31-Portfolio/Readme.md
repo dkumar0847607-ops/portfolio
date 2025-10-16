@@ -1,6 +1,7 @@
 # Shadow-31 Portfolio
 
-A clean, responsive portfolio website showcasing my skills and achievements as a web developer and software engineer. Visit it live at [shadow-31-hactoberfes.netlify.app](https://shadow-31-hactoberfes.netlify.app/).
+- A clean, responsive portfolio website showcasing my skills and achievements as a web developer and software engineer.\
+- Visit it live at:  [shadow-31-hactoberfes.netlify.app](https://shadow-31-hactoberfes.netlify.app/).
 
 ## Features
 
